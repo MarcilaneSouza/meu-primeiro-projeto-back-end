@@ -1,13 +1,13 @@
 const express = require("express")  //Aqui estou iniciando o express
-const router = express.Router() //aqui estou configurando a primeira parte da rota
+const router = express.Router() //Aqui estou configurando a primeira parte da rota
 const { v4: uuidv4 } = require('uuid')
 
 
-const app = express() //aqui estou iniciando  app
+const app = express() //Aqui estou iniciando o app
 app.use(express.json())
-const porta = 3333 // aqui estou criando a porta
+const porta = 3333 //Aqui estou criando a porta
 
-// aqui estou criando lista inicial de mulheres
+//Aqui estou criando lista inicial de mulheres
 const mulheres = [
     {
         id: '1',
