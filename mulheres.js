@@ -1,6 +1,8 @@
 const express = require("express")  //Aqui estou iniciando o express
 const router = express.Router() //Aqui estou configurando a primeira parte da rota
 const { v4: uuidv4 } = require('uuid')
+const conectaBancoDeDados = require('./bancoDeDados')  // Aqui estou ligando bancoDeDados
+conectaBancoDeDados() // Estou chamando a função que conecta o banco de dados
 
 
 const app = express() //Aqui estou iniciando o app
