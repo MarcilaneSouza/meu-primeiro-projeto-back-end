@@ -1,10 +1,10 @@
 const express = require("express")  //Aqui estou iniciando o express
 const router = express.Router() //Aqui estou configurando a primeira parte da rota
-const { v4: uuidv4 } = require('uuid')
+
 const conectaBancoDeDados = require('./bancoDeDados')  // Aqui estou ligando bancoDeDados
 conectaBancoDeDados() // Estou chamando a função que conecta o banco de dados
 
-const mulher = require('./mulherModel')
+const Mulher = require('./mulherModel')
 const app = express() //Aqui estou iniciando o app
 app.use(express.json())
 const porta = 3333 //Aqui estou criando a porta
@@ -20,29 +20,28 @@ async function mostraMulheres(request, response) {
     } 
 }
 
+
 //POST
-function criaMulher(request, response) {
-    const novaMulher = {
-        id: uuidv4(),
+async function criaMulher(request, response) {
+    const novaMulher = new Mulher({
         nome: request.body.nome,
         imagem: request.body.imagem,
-        minibio: request.body.minibio
+        minibio: request.body.minibio,
+        citacao: request.body.citacao
+    })
+    
+    try {
+        const mulherCriada = await novaMulher.save()
+        response.status(201).json(mulherCriada)
+    } catch (erro) {
+        console.log(erro)
     }
-    mulheres.push(novaMulher)
-
-    response.json(mulheres)
 }
 
 // PATCH
-function corrigeMulher (request, response) {
-    function encontraMulher(mulher) {
-        if (mulher.id === request.params.id) {
-            return mulher
-        }
-
-}
-    
-    const mulherEncontrada = mulheres.find(encontraMulher)
+async function corrigeMulher (request, response) {
+    try {
+    const mulherEncontrada = await mulher.findById(request.params.id)
 
     if (request.body.nome) {
         mulherEncontrada.nome = request.body.nome
@@ -56,7 +55,16 @@ function corrigeMulher (request, response) {
         mulherEncontrada = request.body.imagem
     }
 
-    response.json(mulheres)
+    if (request.body.citacao){
+        mulherEncontrada = request.body.citacao
+    }
+
+    const mulherAtualizadaNoBancoDeDados = await mulherEncontrada.save()
+    response.json(mulherAtualizadaNoBancoDeDados)
+
+    } catch (erro) {
+        console.log(erro)
+    }
 }
 
 //DELETE
