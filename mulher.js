@@ -9,7 +9,6 @@ function mostraMulher(request, response) {
         nome: 'Marcilane',
         imagem: 'https://github.com/MarcilaneSouza.png',
         minibio: 'Desenvolvedora Backend'
-
     })
 }
 

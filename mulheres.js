@@ -1,12 +1,15 @@
-const express = require("express")  //Aqui estou iniciando o express
-const router = express.Router() //Aqui estou configurando a primeira parte da rota
+const express = require("express")  // Aqui estou iniciando o express
+const router = express.Router() // Aqui estou configurando a primeira parte da rota
+const cors = require('cors') // Aqui estou trazendo o pacote cors que permiti consumir essa API no front-end
 
-const conectaBancoDeDados = require('./bancoDeDados')  // Aqui estou ligando bancoDeDados
+const conectaBancoDeDados = require('./bancoDeDados')  // Aqui estou ligando ao arquivo bancoDeDados
 conectaBancoDeDados() // Estou chamando a função que conecta o banco de dados
 
 const Mulher = require('./mulherModel')
 const app = express() //Aqui estou iniciando o app
 app.use(express.json())
+app.use(cors())
+
 const porta = 3333 //Aqui estou criando a porta
 
 // GET
@@ -15,11 +18,10 @@ async function mostraMulheres(request, response) {
         const mulheresVindasDoBancoDeDados = await Mulher.find()
 
         response.json(mulheresVindasDoBancoDeDados)
-    }catch (erro) {
+    } catch (erro) {
         console.log(erro)
-    } 
+    }
 }
-
 
 //POST
 async function criaMulher(request, response) {
@@ -39,9 +41,9 @@ async function criaMulher(request, response) {
 }
 
 // PATCH
-async function corrigeMulher (request, response) {
+async function corrigeMulher(request, response) {
     try {
-    const mulherEncontrada = await mulher.findById(request.params.id)
+    const mulherEncontrada = await Mulher.findById(request.params.id)
 
     if (request.body.nome) {
         mulherEncontrada.nome = request.body.nome
@@ -55,30 +57,25 @@ async function corrigeMulher (request, response) {
         mulherEncontrada = request.body.imagem
     }
 
-    if (request.body.citacao){
+    if (request.body.citacao) {
         mulherEncontrada = request.body.citacao
     }
 
     const mulherAtualizadaNoBancoDeDados = await mulherEncontrada.save()
     response.json(mulherAtualizadaNoBancoDeDados)
-
     } catch (erro) {
         console.log(erro)
     }
 }
 
 //DELETE
-function deletaMulher (request, response) {
-    function todasMenosEla(mulher) {
-        if(mulher.id !== request.params.id) {
-            return mulher
-        }
-
-    }
-
-        const mulheresQueFicam = mulheres.filter(todasMenosEla)
-
-        response.json(mulheresQueFicam)
+async function deletaMulher (request, response) {
+    try {
+        await Mulher.findByIdAndDelete(request.params.id)
+        response.json({ messagem: 'Mulher deletada com sucesso!'})
+    } catch(erro) {
+        console.log(erro)
+    }   
 }
 
 app.use(router.get('/mulheres', mostraMulheres)) //configurei rota GET /mulheres

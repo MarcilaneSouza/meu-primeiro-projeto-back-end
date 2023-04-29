@@ -1,14 +1,15 @@
 const mongoose = require('mongoose')
+require('dotenv').config()
 
-async function conectaBancoDeDados(){  //async- assim podemos usar a palavra reservada await que libera o node para atender outros clientes enquanto o MongoDB não responde.
+async function conectaBancoDeDados() {  //async- assim podemos usar a palavra reservada await que libera o node para atender outros clientes enquanto o MongoDB não responde.
     try{
-        console.log('conexão com o banco de dados iniciou')
+        console.log('Conexão com o banco de dados iniciou')
 
-    await mongoose.connect('mongodb+srv://marcilane29:4oWlOK2nwcct4iQc@clustermulheres.o0xyt0m.mongodb.net/?retryWrites=true&w=majority')
+        await mongoose.connect(process.env.MONGO_URL)
 
-    console.log('conexão com o banco de dados feita com sucesso')
+        console.log('Conexão com o banco de dados feita com sucesso')
 
-    }catch(erro) {
+    } catch(erro) {
         console.log(erro)
     }
 

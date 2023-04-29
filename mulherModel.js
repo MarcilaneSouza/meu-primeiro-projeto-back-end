@@ -13,8 +13,10 @@ const MulherSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    minibio: String,
+    minibio: {
+    type: String,
     required: true
+    }
 })
 
 module.exports = mongoose.model('diva', MulherSchema)
