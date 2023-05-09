@@ -1,16 +1,16 @@
-const express = require("express")
-const router = express.Router()  //rota
+const express = require('express')
+const router = express.Router()
 
 const app = express()
 const porta = 3333
 
-function mostraOla(request, response) { //inclui essa linha
+function mostraOla(request, response){
     response.send("Olá, mundo!")
 }
 
-function mostraPorta() {
-    console.log("Servidor criado e rodando na porta", porta)
+function mostraPorta(){
+    console.log("Servidor criado e rodando na porta ", porta)
 }
 
-app.use(router.get('/ola',mostraOla))  //inclui essa linha
-app.listen(porta, mostraPorta) 
+app.use(router.get("/ola", mostraOla))
+app.listen(porta, mostraPorta)

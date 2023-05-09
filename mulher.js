@@ -1,20 +1,20 @@
-const express = require("express")
-const router = express.Router() // metodo-função router
+const express = require('express')
+const router = express.Router()
 
 const app = express()
 const porta = 3333
 
-function mostraMulher(request, response) {
+function mostraMulher(request, response){
     response.json({
-        nome: 'Marcilane',
+        nome: 'Marcilane Souza',
         imagem: 'https://github.com/MarcilaneSouza.png',
         minibio: 'Desenvolvedora Backend'
     })
 }
 
-function mostraPorta() {
-    console.log("Servidor criado e rodando na porta", porta)
+function mostraPorta(){
+    console.log("Servidor criado e rodando na porta ", porta)
 }
 
 app.use(router.get('/mulher', mostraMulher))
-app.listen(porta, mostraPorta) 
+app.listen(porta, mostraPorta)

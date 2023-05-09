@@ -1,11 +1,10 @@
 {
-  "name": "site",
+  "name": "backend_euprogramo",
   "version": "1.0.0",
-  "description": "Meu primeiro servidor com node.js feito no curso EuProgramo.\r link: https://back-end-oroo.onrender.com/mulheres",
-  "main": "script.js",
+  "description": "",
+  "main": "oi.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +13,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mongoose": "^7.1.0",
+    "mongoose": "^7.0.4",
     "uuid": "^9.0.0"
   }
 }
