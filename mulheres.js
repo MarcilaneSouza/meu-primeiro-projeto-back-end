@@ -1,100 +1,97 @@
-const express = require('express') // iniciando o express
-const router = express.Router() // configurando a primeira parte da rota
+const express = require('express');
+const cors = require('cors');
+const conectaBancoDeDados = require('./bancoDeDados');
+const Mulher = require('./mulherModel');
 
-const cors = require('cors')// permissão para consumo da api
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-const conectaBancoDeDados = require('./bancoDeDados') //ligando ao arquivo banco de dados
-conectaBancoDeDados() //chamando a função que liga ao banco de dados
+const porta = 3333;
 
-const Mulher = require('./mulherModel')
+conectaBancoDeDados();
 
-const app = express() //iniciando o app
-app.use(express.json())
-app.use(cors())
-
-const porta = 3333 //criando a porta
-
-//get
-async function mostraMulheres(request, response) {
-    try{
-        const mulheresVindasDoBancoDeDados = await Mulher.find()
-
-        response.json(mulheresVindasDoBancoDeDados)
-
-    }catch (erro){
-        console.log(erro)
+// Rota para obter todas as mulheres
+app.get('/mulheres', async (request, response) => {
+    try {
+        const mulheresVindasDoBancoDeDados = await Mulher.find();
+        response.json(mulheresVindasDoBancoDeDados);
+    } catch (erro) {
+        console.log(erro);
+        response.status(500).json({ error: 'Erro ao buscar mulheres no banco de dados' });
     }
-    
-}
+});
 
-//post
-async function criaMulher(request, response){
-    const novaMulher = new Mulher ({
-        nome: request.body.nome,
-        imagem: request.body.imagem,
-        minibio: request.body.minibio,
-        citacao: request.body.citacao
-    })
+// Rota para criar uma nova mulher
+app.post('/mulheres', async (request, response) => {
+    const { nome, imagem, minibio, citacao } = request.body;
+    const novaMulher = new Mulher({ nome, imagem, minibio, citacao });
 
     try {
-        const mulherCriada = await novaMulher.save()
-        response.status(201).json(mulherCriada)
-    }catch(erro){
-        console.log(erro)
+        const mulherCriada = await novaMulher.save();
+        response.status(201).json(mulherCriada);
+    } catch (erro) {
+        console.log(erro);
+        response.status(500).json({ error: 'Erro ao criar nova mulher' });
     }
-}
+});
 
-//patch
-async function corrigeMulher(request, response){
+// Rota para corrigir informações de uma mulher existente
+app.patch('/mulheres/:id', async (request, response) => {
+    const { nome, imagem, minibio, citacao } = request.body;
 
-    try{
-        const mulherEncontrada = await Mulher.findById(request.params.id)
+    try {
+        const mulherEncontrada = await Mulher.findById(request.params.id);
 
-        if (request.body.nome){
-            mulherEncontrada.nome = request.body.nome
-        }
-    
-        if (request.body.minibio){
-            mulherEncontrada.minibio = request.body.minibio
-        }
-    
-        if (request.body.imagem){
-            mulherEncontrada = request.body.imagem
+        if (!mulherEncontrada) {
+            return response.status(404).json({ error: 'Mulher não encontrada' });
         }
 
-        if (request.body.citacao){
-            mulherEncontrada = request.body.citacao
+        if (nome) {
+            mulherEncontrada.nome = nome;
         }
 
-        const mulherAtualizadaNoBancoDeDados = await mulherEncontrada.save()
-        response.json(mulherAtualizadaNoBancoDeDados)
+        if (minibio) {
+            mulherEncontrada.minibio = minibio;
+        }
 
-    }catch(erro){
-        console.log(erro)
+        if (imagem) {
+            mulherEncontrada.imagem = imagem;
+        }
+
+        if (citacao) {
+            mulherEncontrada.citacao = citacao;
+        }
+
+        const mulherAtualizadaNoBancoDeDados = await mulherEncontrada.save();
+        response.json(mulherAtualizadaNoBancoDeDados);
+    } catch (erro) {
+        console.log(erro);
+        response.status(500).json({ error: 'Erro ao corrigir mulher' });
     }
-}
+});
 
-//delete
-async function deletaMulher(request, response){
-    try{
-        await Mulher.findByIdAndDelete(request.params.id)
-        response.json({mensagem: 'Mulher deletada com sucesso!'})
-        
-    }catch(erro){
-        console.log(erro)
+// Rota para deletar uma mulher pelo ID
+app.delete('/mulheres/:id', async (request, response) => {
+    try {
+        const mulherDeletada = await Mulher.findByIdAndDelete(request.params.id);
+
+        if (!mulherDeletada) {
+            return response.status(404).json({ error: 'Mulher não encontrada para deletar' });
+        }
+
+        response.json({ mensagem: 'Mulher deletada com sucesso!' });
+    } catch (erro) {
+        console.log(erro);
+        response.status(500).json({ error: 'Erro ao deletar mulher' });
     }
+});
 
-}
-
-app.use(router.get("/mulheres", mostraMulheres)) //rota get/mulheres
-app.use(router.post("/mulheres", criaMulher)) //rota post/mulheres
-app.use(router.patch("/mulheres/:id", corrigeMulher)) //rota patch/mulheres
-app.use(router.delete("/mulheres/:id", deletaMulher)) //rota deleta/mulheres
-
-//porta
+// Função para mostrar a porta onde o servidor está rodando
 function mostraPorta() {
-    console.log("Servidor criado e rodando na porta ", porta)
+    console.log(`Servidor criado e rodando na porta ${porta}`);
 }
 
-
-app.listen(porta, mostraPorta) //ouvindo a porta
+// Inicia o servidor na porta especificada
+app.listen(porta, mostraPorta);
+node

@@ -12,6 +12,40 @@ function mostraMulher(request, response){
     })
 }
 
+[
+
+    {
+   
+      nome: 'Simara Conceição',
+   
+      imagem: 'https://bit.ly/3LJIyOF',
+   
+      minibio: 'Desenvolvedora e instrutora',
+   
+    },
+   
+    {
+   
+      nome: 'Iana Chan',
+   
+      imagem: 'https://bit.ly/3JCXBqP',
+   
+      minibio: 'CEO & Founder da PrograMaria',
+   
+    },
+   
+    {
+   
+      nome: 'Luana Pimentel',
+   
+      imagem: 'https://bit.ly/3FKpFaz',
+   
+      minibio: 'Senior Staff Software Engineer',
+   
+    }
+   
+   ]
+
 function mostraPorta(){
     console.log("Servidor criado e rodando na porta ", porta)
 }

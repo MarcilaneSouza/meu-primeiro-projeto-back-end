@@ -4,13 +4,15 @@ const router = express.Router()
 const app = express()
 const porta = 3333
 
-function mostraOla(request, response){
+function mostraOla(request, response) {
     response.send("Olá, mundo!")
 }
 
-function mostraPorta(){
+function mostraPorta() {
+
     console.log("Servidor criado e rodando na porta ", porta)
 }
 
-app.use(router.get("/ola", mostraOla))
+
+app.use(router.get('/ola', mostraOla))
 app.listen(porta, mostraPorta)
